@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<ruleset name="NoGetCurrentUser">
+ <description>A phpcs sniff to disallow using get_current_user.</description>
+</ruleset>
