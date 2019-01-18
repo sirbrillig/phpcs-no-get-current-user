@@ -8,7 +8,7 @@ use PHP_CodeSniffer\Files\File;
 use NoGetCurrentUser\Lib\Helpers;
 
 class NoGetCurrentUserSniff implements Sniff {
-	private $importedSymbols = [];
+	private $importedSymbolsByFile = [];
 
 	public function register() {
 		return [T_STRING, T_USE];
@@ -17,8 +17,10 @@ class NoGetCurrentUserSniff implements Sniff {
 	public function process(File $phpcsFile, $stackPtr) {
 		$tokens = $phpcsFile->getTokens();
 		$tokenType = $tokens[$stackPtr]['type'] ?? '';
+		$importedSymbols = $this->importedSymbolsByFile[$phpcsFile->path] ?? [];
 		if ($tokenType === 'T_USE') {
-			$this->importedSymbols = array_merge($this->importedSymbols, Helpers::getImportedSymbols($phpcsFile, $stackPtr));
+			$importedSymbols = array_merge($importedSymbols, Helpers::getImportedSymbols($phpcsFile, $stackPtr));
+			$this->importedSymbolsByFile[$phpcsFile->path] = $importedSymbols;
 			return;
 		}
 		$tokenContent = $tokens[$stackPtr]['content'] ?? '';
@@ -37,7 +39,7 @@ class NoGetCurrentUserSniff implements Sniff {
 		if (Helpers::isNamespacedCall($phpcsFile, $stackPtr)) {
 			return;
 		}
-		if (Helpers::isImportedCall($phpcsFile, $stackPtr, $this->importedSymbols)) {
+		if (Helpers::isImportedCall($phpcsFile, $stackPtr, $importedSymbols)) {
 			return;
 		}
 		if (Helpers::isFunctionDefined($phpcsFile, $stackPtr)) {
