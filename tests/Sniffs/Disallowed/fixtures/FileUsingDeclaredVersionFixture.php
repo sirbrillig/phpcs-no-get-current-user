@@ -1,5 +1,7 @@
 <?php
 
+namespace Declared;
+
 function get_current_user() {
 	return 'hello';
 }
