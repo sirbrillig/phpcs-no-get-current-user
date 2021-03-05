@@ -56,3 +56,4 @@ vendor/bin/phpcs -s src/MyProject/MyClass.php
 
 - [VariableAnalysis](https://github.com/sirbrillig/phpcs-variable-analysis): Find undefined and unused variables.
 - [ImportDetection](https://github.com/sirbrillig/phpcs-import-detection): A set of phpcs sniffs to look for unused or unimported symbols.
+
